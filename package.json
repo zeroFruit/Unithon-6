@@ -8,6 +8,9 @@
     "watch": "nodemon --exec node ./node_modules/babel-cli/bin/babel-node.js ./bin/www.js",
     "build": "babel src -d build/src && babel bin -d build/bin"
   },
+  "engines" : {
+    "node" : ">=8"
+  },
   "dependencies": {
     "aws-sdk": "^2.175.0",
     "axios": "^0.17.1",

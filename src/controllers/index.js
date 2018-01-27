@@ -1,39 +1,22 @@
-import moment from 'moment';
-import * as s3 from '../helpers/s3';
+import * as dydb from '../helpers/dynamodb';
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
 
-function getHome(req, res) {
+export const getHome = (req, res) => {
   return res.send(
     `
-      <h1>Page App Asset Server</h1>
-      <h2>beta-0.0.1</h2>
-      <br>
+      <h1>Unithon 6 Server</h1>
     `
   );
-}
+};
 
-function getBucketInfo(req, res) {
-  return res.json({
-    bucket: process.env.AWS_BUCKET_NAME
-  });
-}
+export const putItem = (req, res) => {
+  const { tableName, payload } = req.body;
 
-
-function postBook(req, res) {
-  const { buffer, originalname, mimetype } = req.file;
-  const key = originalname.split('.')[0];
-  s3.upload(buffer, key, mimetype)
-    .then((result) => {
-      console.log(`${moment().format('YY-MM-DD HH:mm:ss')} Successfully upload.`);
-      return res.json(result);
+  dydb.putItem(tableName, payload)
+    .then(() => res.send({
+      message: 'success'
+    }))
+    .catch((err) => {
+      return res.status(500).send(err)
     });
-}
-
-export {
-  getHome,
-  getBucketInfo,
-  postBook
 };
